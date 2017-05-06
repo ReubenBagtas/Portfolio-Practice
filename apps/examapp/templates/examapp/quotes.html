@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+          {%for message in messages%}
+        <p>{{message}}</p>
+        {%endfor%}
+        
+        <h2>Welcome, {{request.session.username}}</h2>
+        <h6><a href='/logout'>Logout</a></h6>
+
+        
+            <h4>Quotable Quotes:</h4>
+           {%for quote in quotes%}
+           <div style='border:1px solid black; display:inline-block; '>
+           <p>{{quote.quoteby}}: "{{quote.quote}}"</p>
+
+           <p>Posted By: <a href='/user/{{quote.postedby}}'> {{quote.postedby}}</a></p>
+           <form action='/add' method='POST'>
+           <input type='hidden' name='add' value='{{quote.id}}'>
+           <input type='submit' value='Add to My List'>
+           {% csrf_token %}
+           </form>
+           </div>
+             {%endfor%}
+<h4>Your favorites</h4>
+<div style='border:1px solid black; display:inline-block; '>
+         
+         {%for favorite in favorites%}
+         <h4>{{favorite.quote_id.quoteby}}: "{{favorite.quote_id.quote}}"</h4>
+         <h4>Posted by: <a href='/user/{{favorite.quote_id.postedby}}'>{{favorite.quote_id.postedby}}</a></h4>
+         
+           <form action='/delete' method='POST'>
+           <input type='hidden' name='delete' value='{{favorite.id}}'>
+           <input type='submit' value='delete'>
+           {% csrf_token %}
+           </form>
+
+
+        {%endfor%}
+
+</div>
+
+        
+
+        
+
+        <h4>Contribute a Quote</h4>
+        <form action='/quotesprocess' method='POST'>
+       <p> Quoted by: <input type='text' name='quoteby'</p>
+       <p>Message: <input type='text' name='quote'></p> 
+       <input type='submit' value='Submit'>
+        {% csrf_token %} 
+       </form>
+
+        
+
+
+            
+
+    </body>
+</html>
